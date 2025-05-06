@@ -1,7 +1,6 @@
 from flask import Blueprint, request, jsonify
 from app.services.example import UserService
 
-
 example_bp = Blueprint('example', __name__)
 
 @example_bp.route("/users", methods=["POST"])
