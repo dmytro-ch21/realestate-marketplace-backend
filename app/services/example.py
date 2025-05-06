@@ -1,4 +1,4 @@
-from app.repositories.example import UserRepository
+from app.repositories.user_repository import UserRepository
 from app.models.user import User
 from typing import Optional
 
