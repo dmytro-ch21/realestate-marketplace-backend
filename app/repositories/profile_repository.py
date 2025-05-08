@@ -7,7 +7,7 @@ from sqlalchemy import select
 class ProfileRepository:
     @staticmethod
     def create(user_id:int, **kwargs) -> Profile:
-        profile = Profile(user_id=user_id)
+        profile = Profile(user_id=user_id) # type: ignore
         
         # set the optional attributes dynamically
         for key, value in kwargs.items():

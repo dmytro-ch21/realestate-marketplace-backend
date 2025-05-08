@@ -7,7 +7,7 @@ class Listing(db.Model):
     __tablename__ = "listings"
     id = mapped_column(Integer, primary_key=True)
     owner_id = mapped_column(Integer, ForeignKey("users.id"), nullable=False)
-    title = mapped_column(String(255), nullable=True)
+    title = mapped_column(String(255), nullable=False)
     description = mapped_column(Text, nullable=True)
     property_type = mapped_column(
         Enum('house', 'apartment', 'condo', 'land', name="property_type_enum"),
@@ -15,9 +15,9 @@ class Listing(db.Model):
         default="house"
         ) 
     price = mapped_column(Numeric(12,2), nullable=False)
-    beedrooms = mapped_column(Integer, nullable=True)
-    bathrooms = mapped_column(Float, nullable=False)
-    area_sqft = mapped_column(Integer, nullable=False)
+    bedrooms = mapped_column(Integer, nullable=True)
+    bathrooms = mapped_column(Float, nullable=True)
+    area_sqft = mapped_column(Integer, nullable=True)
     status = mapped_column(
         Enum('active', 'pending', 'sold', 'inactive', name="listing_status_enum"), 
         nullable=False, 
