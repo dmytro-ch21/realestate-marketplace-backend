@@ -141,10 +141,12 @@ def update_user_profile_image(user_id: int):
     profile.avatar_url = uploaded_result["secure_url"]
     profile.cloudinary_public_id = uploaded_result["public_id"]
 
-    UserService.update_user_profile(user_id, {
-                                    "avatar_url": profile.avatar_url, 
-                                    "cloudinary_public_id": profile.cloudinary_public_id
-                                    })
+    UserService.update_user_profile(
+        user_id, {
+            "avatar_url": profile.avatar_url,
+            "cloudinary_public_id": profile.cloudinary_public_id
+        }
+    )
 
     return jsonify({
         "message": "successfully uploaded image",

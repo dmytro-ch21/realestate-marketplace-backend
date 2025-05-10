@@ -66,6 +66,7 @@ class Listing(db.Model):
             "zip_code": self.zip_code,
             "created_at": self.created_at,
             "updated_at": self.updated_at,
+            "images": [img.serialize() for img in self.images]
         }
 
 

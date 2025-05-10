@@ -1,5 +1,7 @@
 from app.repositories.listing_repository import ListingRepository
+from app.repositories.listing_image_repository import ListingImageRepository
 from app.models.listing import Listing
+from app.models.listing_image import ListingImage
 from typing import Optional, List, Dict, Any
 
 
@@ -17,3 +19,52 @@ class ListingService:
     @staticmethod
     def get_all_listings() -> List[Listing]:
         return ListingRepository.get_all()
+    
+    @staticmethod
+    def get_listings_by_id(listing_id: int) -> Optional[Listing]:
+        return ListingRepository.get_by_id(listing_id)
+    
+    @staticmethod
+    def get_listings_by_owner_id(owner_id: int) -> List[Listing]:
+        return ListingRepository.get_by_owner_id(owner_id)
+    
+    @staticmethod
+    def update_listing_by_id(listing_id: int, **kwargs) -> Listing:
+        listing = ListingRepository.get_by_id(listing_id)
+        if not listing:
+            raise ValueError(f"Listing with id {listing_id} not found.")
+        
+        for key, value in kwargs.items():
+            if hasattr(listing, key):
+                setattr(listing, key, value)
+        
+        return ListingRepository.update(listing)
+    
+    @staticmethod
+    def delete_listing_by_id(listing_id: int) -> bool:
+        listing = ListingRepository.get_by_id(listing_id)
+        if not listing:
+            raise ValueError(f"Listing with id {listing_id} not found.")
+        return ListingRepository.delete(listing)
+    
+    @staticmethod
+    def add_listing_image(listing_id: int, image_url: str, 
+        claudinary_public_id: str, is_primary: bool, caption: str) -> Optional[ListingImage]: 
+        
+        listing = ListingRepository.get_by_id(listing_id)
+        if not listing:
+            return None
+        
+        image = ListingImageRepository.create(
+            listing_id=listing_id,
+            image_url=image_url,
+            claudinary_public_id=claudinary_public_id,
+            is_primary=is_primary,
+            caption=caption
+        )
+        
+        return image
+        
+        
+        
+        

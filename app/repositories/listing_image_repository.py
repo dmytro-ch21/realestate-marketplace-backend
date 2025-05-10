@@ -6,12 +6,19 @@ from sqlalchemy import select
 
 class ListingImageRepository:
     @staticmethod
-    def create(listing_id: int, image_url: str, cl_pid: str, **kwargs) -> ListingImage:
-        image = ListingImage(listing_id=listing_id, image_url=image_url, claudinary_public_id=cl_pid) # type: ignore
-        # set optional attributes
-        for key, value in kwargs.items():
-            if hasattr(image, key):
-                setattr(image, key, value)
+    def create(listing_id: int, 
+               image_url: str, 
+               claudinary_public_id: str, 
+               is_primary: bool, 
+               caption: str) -> ListingImage:
+        
+        image = ListingImage(
+            listing_id=listing_id, 
+            image_url=image_url, 
+            claudinary_public_id=claudinary_public_id,
+            is_primary=is_primary,
+            caption=caption
+        )
         
         db.session.add(image)
         db.session.commit()
