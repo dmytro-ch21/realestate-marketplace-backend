@@ -12,6 +12,7 @@ class Profile(db.Model):
     phone_number = mapped_column(String(20), nullable=True)
     bio = mapped_column(Text, nullable=True)
     avatar_url = mapped_column(String(255), nullable=True)
+    cloudinary_public_id = mapped_column(String(255), nullable=True)
     address = mapped_column(String(255), nullable=True)
     city = mapped_column(String(100), nullable=True)
     state = mapped_column(String(100), nullable=True)

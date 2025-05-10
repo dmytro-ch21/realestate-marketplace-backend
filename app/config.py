@@ -10,6 +10,10 @@ class BaseConfig:
     APISPEC_TITLE = "Kickstart API"
     APISPEC_VERSION = "1.0.0"
     SECRET_KEY = getenv("SECRET_KEY")
+    CLOUDINARY_CLOUD_NAME = getenv("CLOUDINARY_CLOUD_NAME")
+    CLOUDINARY_API_KEY = getenv("CLOUDINARY_API_KEY")
+    CLOUDINARY_API_SECRET = getenv("CLOUDINARY_API_SECRET")
+
 
 class DevelopmentConfig(BaseConfig):
     DEBUG = True
