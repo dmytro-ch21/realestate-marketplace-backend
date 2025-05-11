@@ -7,10 +7,6 @@ from typing import Optional
 class AuthService:
     @staticmethod
     def register(email: str, username: str, password: str) -> User:
-        # implement business rules here
-        # a user cannot register with already existing email
-        # a user cannot register with already existing username
-        
         if UserRepository.get_by_email(email):
             raise ValueError(f"Email '{email}' already exists. Please try another one.")
         
@@ -18,10 +14,7 @@ class AuthService:
             raise ValueError(f"Username '{username}' already exists. Please try another one.")
         
         user = UserRepository.create_user(email, username, password)
-        
-        # create a profile for the user along with user creation
         ProfileRepository.create(user.id)
-        
         return user
         
         

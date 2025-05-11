@@ -6,7 +6,7 @@ from app.models import User, Profile, Listing, ListingImage, WishlistItem
 admin_panel = Admin(name='Admin Panel', template_mode='bootstrap4')
 
 class UserView(ModelView):
-    column_list = [c.name for c in User.__table__.columns] # type: ignore
+    column_list = [c.name for c in User.__table__.columns if not c == "password"]
     form_columns = [c.name for c in User.__table__.columns] # type: ignore
     
 class ProfileView(ModelView):

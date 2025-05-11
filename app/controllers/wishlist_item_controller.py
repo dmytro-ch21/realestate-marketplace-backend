@@ -1,10 +1,12 @@
 from flask import Blueprint, request, jsonify
 from app.services.wishlist_items_service import WhishlistItemService
 import cloudinary.uploader
+from flask_jwt_extended import jwt_required
 
 wishlist_items_bp = Blueprint("wishlist_items", __name__)
 
 @wishlist_items_bp.route("/wishlist/<int:user_id>/listing/<int:listing_id>", methods=["POST"])
+@jwt_required()
 def add_wishlist_item(user_id: int, listing_id: int):
     try:
         item = WhishlistItemService.add_to_wishlist(user_id=user_id, listing_id=listing_id)
@@ -13,6 +15,7 @@ def add_wishlist_item(user_id: int, listing_id: int):
         return jsonify({"error": str(e)})
     
 @wishlist_items_bp.route("/wishlist/<int:user_id>/wishlist-item/<int:wishlist_item_id>", methods=["DELETE"])
+@jwt_required()
 def delete_wishlist_item(user_id: int, wishlist_item_id: int):
     item = WhishlistItemService.get_item_by_id(wishlist_item_id)
     if not item:

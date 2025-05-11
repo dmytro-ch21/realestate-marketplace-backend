@@ -2,11 +2,13 @@ from flask import Blueprint, request, jsonify
 from app.utils.validators import is_valid_email, is_valid_password, is_valid_username
 from app.services.user_service import UserService
 import cloudinary.uploader
+from flask_jwt_extended import jwt_required
 
 user_bp = Blueprint("users", __name__)
 
 
 @user_bp.route("/users/<int:user_id>", methods=["GET"])
+@jwt_required()
 def get_user_by_id(user_id: int):
     # have accessed the service layer to get one user
     user = UserService.get_user_by_id(user_id)
@@ -20,8 +22,8 @@ def get_user_by_id(user_id: int):
             }
         ), 404
 
-
 @user_bp.route("/users/<int:user_id>", methods=["PUT"])
+@jwt_required()
 def update_user_by_id(user_id: int):
     # need to get the user by id
     user = UserService.get_user_by_id(user_id)
@@ -65,8 +67,8 @@ def update_user_by_id(user_id: int):
             "message": "Something went wrong while updating the user information"
         }), 400
 
-
 @user_bp.route("/users/<int:user_id>/profile", methods=["GET"])
+@jwt_required()
 def get_user_profile(user_id: int):
     # find the profile
     profile = UserService.get_profile_by_user_id(user_id)
@@ -81,8 +83,8 @@ def get_user_profile(user_id: int):
             }
         ), 404
 
-
 @user_bp.route("/users/<int:user_id>/profile", methods=["PUT"])
+@jwt_required()
 def update_user_profile(user_id: int):
     profile = UserService.get_profile_by_user_id(user_id)
 
@@ -114,12 +116,10 @@ def update_user_profile(user_id: int):
     except ValueError as e:
         return jsonify({"error": "Something went wrond", "message": str(e)})
 
-
 @user_bp.route("/users/<int:user_id>/profile/image", methods=["PATCH"])
+@jwt_required()
 def update_user_profile_image(user_id: int):
-
     profile = UserService.get_profile_by_user_id(user_id)
-
     if not profile:
         return jsonify({"error": "User Not Found"}), 404
 

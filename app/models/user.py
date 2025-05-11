@@ -2,6 +2,7 @@ from datetime import datetime, timezone
 from sqlalchemy import String, DateTime, Integer, Boolean
 from sqlalchemy.orm import mapped_column, relationship
 from app.extensions import db
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class User(db.Model):
@@ -9,8 +10,7 @@ class User(db.Model):
 
     id = mapped_column(Integer, primary_key=True)
     email = mapped_column(String(255), unique=True, nullable=False, index=True)
-    username = mapped_column(String(255), unique=True,
-                             nullable=False, index=True)
+    username = mapped_column(String(255), unique=True, nullable=False, index=True)
     password = mapped_column(String(255), nullable=False)
     is_active = mapped_column(Boolean, default=True, nullable=False)
     is_admin = mapped_column(Boolean, default=False, nullable=False)
@@ -28,8 +28,14 @@ class User(db.Model):
 
 #   relationships:
     profile = relationship("Profile", back_populates="user")
-    listings = relationship("Listing", back_populates="owner") 
+    listings = relationship("Listing", back_populates="owner")
     wishlist_items = relationship("WishlistItem", back_populates="user")
+
+    def set_password(self, password):
+        self._password = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
 
     def serialize(self):
         return {
@@ -40,6 +46,5 @@ class User(db.Model):
             "is_admin": self.is_admin,
             "created_at": self.created_at,
             "updated_at": self.updated_at,
-            "password_debug": self.password,
             "wishlisted_items": [i.serialize() for i in self.wishlist_items]
         }

@@ -18,7 +18,6 @@ class WishlistItemRepository:
             db.session().rollback()
             raise ValueError("This listing is already added to the wishlist.")
         
-    
     @staticmethod
     def get_by_user(user_id: int) -> List[WishlistItem]:
         stmt = select(WishlistItem).where(WishlistItem.user_id == user_id)
@@ -30,7 +29,6 @@ class WishlistItemRepository:
         stmt = select(WishlistItem).where(WishlistItem.id == item_id)
         results = db.session.execute(stmt)
         return results.scalars().first()
-    
     
     @staticmethod
     def get_listings_by_user(user_id: int) -> List[Listing]:

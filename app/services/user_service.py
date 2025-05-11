@@ -32,3 +32,7 @@ class UserService:
                 setattr(profile, key, value)
         
         return ProfileRepository.update(profile)
+    
+    @staticmethod
+    def get_user_by_email(user_email: str) -> Optional[User]:
+        return UserRepository.get_by_email(user_email)

@@ -80,7 +80,6 @@ class ListingService:
             return False
         return ListingImageRepository.delete(image)
         
-    
     @staticmethod
     def get_listing_image_by_id(image_id: int) -> Optional[ListingImage]:
         return ListingImageRepository.get_by_id(image_id)

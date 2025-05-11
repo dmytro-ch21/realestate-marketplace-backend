@@ -1,10 +1,12 @@
 from flask import Blueprint, request, jsonify
 from app.services.listing_service import ListingService
 import cloudinary.uploader
+from flask_jwt_extended import jwt_required
 
 listing_bp = Blueprint("listings", __name__)
 
 @listing_bp.route("/listings", methods=["POST"])
+@jwt_required()
 def create_listing():
     # capture the data from request
     data = request.get_json()
@@ -69,6 +71,7 @@ def get_all_listings():
         }), 404
 
 @listing_bp.route("/listings/<int:listing_id>", methods=["GET"])
+@jwt_required()
 def get_listing_by_id(listing_id: int):
     listing = ListingService.get_listings_by_id(listing_id)
     if listing:
@@ -77,6 +80,7 @@ def get_listing_by_id(listing_id: int):
         return jsonify({"error": f"Listing with id {listing_id} not found"}), 404
 
 @listing_bp.route("/listings/owner/<int:owner_id>", methods=["GET"])
+@jwt_required()
 def get_listings_by_owner_id(owner_id: int):
     listings = ListingService.get_listings_by_owner_id(owner_id)
     if listings:
@@ -85,6 +89,7 @@ def get_listings_by_owner_id(owner_id: int):
         return jsonify({"error": f"Listings not found for given owner(user) id {owner_id}"}), 404
 
 @listing_bp.route("/listings/<int:listing_id>", methods=["PUT"])
+@jwt_required()
 def update_listing(listing_id: int):
     # capture the data from request
     data = request.get_json()
@@ -116,6 +121,7 @@ def update_listing(listing_id: int):
         return jsonify({"message": str(e)}), 404
 
 @listing_bp.route("/listings/<int:listing_id>", methods=["DELETE"])
+@jwt_required()
 def delete_listing(listing_id: int):
     try:
         success = ListingService.delete_listing_by_id(listing_id)
@@ -127,6 +133,7 @@ def delete_listing(listing_id: int):
         return jsonify({"error": "No Found", "message": str(e)})
     
 @listing_bp.route("/listings/<int:listing_id>/images", methods=["POST"])
+@jwt_required()
 def upload_image(listing_id: int):
     listing = ListingService.get_listings_by_id(listing_id)
 
@@ -166,6 +173,7 @@ def upload_image(listing_id: int):
 
 # TODO - Fix the issue with deleting the listing image that doesnt belog to that listing
 @listing_bp.route("/listings/<int:listing_id>/images/<int:image_id>", methods=["DELETE"])
+@jwt_required()
 def delete_image(listing_id: int, image_id: int):
     listing = ListingService.get_listings_by_id(listing_id)
     
