@@ -40,5 +40,6 @@ class User(db.Model):
             "is_admin": self.is_admin,
             "created_at": self.created_at,
             "updated_at": self.updated_at,
-            "password_debug": self.password
+            "password_debug": self.password,
+            "wishlisted_items": [i.serialize() for i in self.wishlist_items]
         }
