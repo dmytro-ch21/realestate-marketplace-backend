@@ -1,7 +1,9 @@
 from os import getenv
+
 from dotenv import load_dotenv
 
 load_dotenv(".env")
+
 
 class BaseConfig:
     SQLALCHEMY_DATABASE_URI = getenv("DATABASE_URL")
@@ -18,12 +20,15 @@ class BaseConfig:
 class DevelopmentConfig(BaseConfig):
     DEBUG = True
 
+
 class TestConfig(BaseConfig):
     SQLALCHEMY_DATABASE_URI = "sqlite+pysqlite:///:memory:"
     TESTING = True
 
+
 class ProductionConfig(BaseConfig):
     DEBUG = False
+
 
 def get_config(env):
     return {

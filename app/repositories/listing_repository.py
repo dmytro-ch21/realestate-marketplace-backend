@@ -1,14 +1,15 @@
-from typing import Optional, List
+from typing import List, Optional
+
+from sqlalchemy import desc, select
+
 from app.extensions import db
 from app.models.listing import Listing
-from sqlalchemy import select, desc
 
 
 class ListingRepository:
     @staticmethod
     def create(owner_id: int, title: str, price: float, additional_data) -> Listing:
-        listing = Listing(owner_id=owner_id, title=title,
-                          price=price)
+        listing = Listing(owner_id=owner_id, title=title, price=price)
         print("REPOSITORY LOG: ", listing.serialize())
         # set all additional attributes
         for key, value in additional_data.items():
@@ -32,8 +33,7 @@ class ListingRepository:
 
     @staticmethod
     def get_all(limit: int = 20, offset: int = 0) -> List[Listing]:
-        stmt = select(Listing).order_by(
-            desc(Listing.updated_at)).limit(limit).offset(offset)
+        stmt = select(Listing).order_by(desc(Listing.updated_at)).limit(limit).offset(offset)
         results = db.session.execute(stmt)
         return list(results.scalars().all())
 

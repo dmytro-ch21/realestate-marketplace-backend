@@ -1,7 +1,8 @@
-from datetime import datetime, timezone
-from sqlalchemy import String, DateTime, Integer, Boolean, ForeignKey, Text
+from sqlalchemy import Boolean, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import mapped_column, relationship
+
 from app.extensions import db
+
 
 class Profile(db.Model):
     __tablename__ = "profiles"
@@ -18,10 +19,10 @@ class Profile(db.Model):
     state = mapped_column(String(100), nullable=True)
     zip_code = mapped_column(String(100), nullable=True)
     is_deleted = mapped_column(Boolean, default=False, nullable=False)
-  
-    #relationships:
+
+    # relationships:
     user = relationship("User", back_populates="profile")
-    
+
     def serialize(self):
         return {
             "id": self.id,
@@ -34,6 +35,5 @@ class Profile(db.Model):
             "city": self.city,
             "state": self.state,
             "zip_code": self.zip_code,
-            "is_deleted": self.is_deleted 
+            "is_deleted": self.is_deleted,
         }
-
