@@ -15,7 +15,11 @@ class UserService:
     def update_user(user: User, **kwargs) -> User:
         for key, value in kwargs.items():
             if hasattr(user, key):
-                setattr(user, key, value)
+                if key == "password":
+                    user.set_password(value)
+                else:
+                    setattr(user, key, value)
+
         return UserRepository.update(user)
 
     @staticmethod

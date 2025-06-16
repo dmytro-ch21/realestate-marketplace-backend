@@ -16,10 +16,25 @@ def create_listing():
     if not data:
         return jsonify({"error": "400 Bad Request", "message": "Data as JSON not provided"}), 400
 
+    # Add validation for property_type
+    # Update with your actual enum values
+    valid_property_types = ["house", "apartment",
+                            "condo", "townhouse", "commercial"]
+    if "property_type" in data and data.get("property_type").lower() not in valid_property_types:
+        return jsonify({
+            "error": "400 Bad Request",
+            "message": f"Invalid property_type. Must be one of: {', '.join(valid_property_types)}"
+        }), 400
+
+    # Convert property_type to lowercase to match enum
+    if "property_type" in data:
+        data["property_type"] = data["property_type"].lower()
+
     if "owner_id" not in data or not data.get("owner_id"):
         return (
             jsonify(
-                {"error": "400 Bad Request", "message": "Required field 'owner_id' is missing"}
+                {"error": "400 Bad Request",
+                    "message": "Required field 'owner_id' is missing"}
             ),
             400,
         )
@@ -31,13 +46,15 @@ def create_listing():
 
     if "title" not in data or not data.get("title"):
         return (
-            jsonify({"error": "400 Bad Request", "message": "Required field 'title' is missing"}),
+            jsonify({"error": "400 Bad Request",
+                    "message": "Required field 'title' is missing"}),
             400,
         )
 
     if "price" not in data or not data.get("price"):
         return (
-            jsonify({"error": "400 Bad Request", "message": "Required field 'price' is missing"}),
+            jsonify({"error": "400 Bad Request",
+                    "message": "Required field 'price' is missing"}),
             400,
         )
 
@@ -48,7 +65,8 @@ def create_listing():
     if listing:
         return (
             jsonify(
-                {"message": "Successfully created a new listing", "listing": listing.serialize()}
+                {"message": "Successfully created a new listing",
+                    "listing": listing.serialize()}
             ),
             201,
         )
@@ -96,7 +114,8 @@ def update_listing(listing_id: int):
 
     if "owner_id" in data:
         return (
-            jsonify({"error": "400 Bad Request", "message": "Not allowed to change the owner id."}),
+            jsonify({"error": "400 Bad Request",
+                    "message": "Not allowed to change the owner id."}),
             400,
         )
 
@@ -106,10 +125,12 @@ def update_listing(listing_id: int):
         return jsonify({"error": "You are not authorized to access this account."})
 
     try:
-        listing = ListingService.update_listing_by_id(listing_id=listing_id, **data)
+        listing = ListingService.update_listing_by_id(
+            listing_id=listing_id, **data)
         return (
             jsonify(
-                {"message": "Successfully created a new listing", "listing": listing.serialize()}
+                {"message": "Successfully created a new listing",
+                    "listing": listing.serialize()}
             ),
             200,
         )
@@ -159,7 +180,8 @@ def upload_image(listing_id: int):
     caption = request.form.get("caption", "")
 
     # upload image to claudinary
-    upload_result = cloudinary.uploader.upload(image_file, folder="listing_images")
+    upload_result = cloudinary.uploader.upload(
+        image_file, folder="listing_images")
     print("upload_result", upload_result)
     # create a new listing image object
 

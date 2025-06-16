@@ -12,11 +12,13 @@ class User(db.Model):
 
     id = mapped_column(Integer, primary_key=True)
     email = mapped_column(String(255), unique=True, nullable=False, index=True)
-    username = mapped_column(String(255), unique=True, nullable=False, index=True)
+    username = mapped_column(String(255), unique=True,
+                             nullable=False, index=True)
     password = mapped_column(String(255), nullable=False)
     is_active = mapped_column(Boolean, default=True, nullable=False)
     is_admin = mapped_column(Boolean, default=False, nullable=False)
-    created_at = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
+    created_at = mapped_column(
+        DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
     updated_at = mapped_column(
         DateTime,
         default=lambda: datetime.now(timezone.utc),
@@ -30,7 +32,7 @@ class User(db.Model):
     wishlist_items = relationship("WishlistItem", back_populates="user")
 
     def set_password(self, password):
-        self._password = generate_password_hash(password)
+        self.password = generate_password_hash(password)
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
@@ -42,8 +44,8 @@ class User(db.Model):
             "username": self.username,
             "is_active": self.is_active,
             "is_admin": self.is_admin,
-            "created_at": self.created_at,
-            "updated_at": self.updated_at,
+            # "created_at": self.created_at,
+            # "updated_at": self.updated_at,
             "profile_information": self.profile.serialize(),
             "owned_listings": [listing.serialize() for listing in self.listings],
             "wishlisted_items": [i.serialize() for i in self.wishlist_items],
