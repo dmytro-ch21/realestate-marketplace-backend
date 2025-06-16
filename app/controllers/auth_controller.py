@@ -58,7 +58,7 @@ def login():
     user = UserService.get_user_by_email(data.get("email"))
 
     if not user:
-        return jsonify({"error": f"No user with email {data.get("email")} found"})
+        return jsonify({"error": f"No user with email {data.get("email")} found"}), 400
 
     if not data.get("password"):
         return jsonify({"error": "Password is required"}), 400
