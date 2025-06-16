@@ -53,7 +53,7 @@ def login():
     data = request.get_json()
 
     if not data or "email" not in data or "password" not in data:
-        return jsonify({"error": "Missing email or password fields"})
+        return jsonify({"error": "Missing email or password fields"}), 400
 
     user = UserService.get_user_by_email(data.get("email"))
 
@@ -61,13 +61,13 @@ def login():
         return jsonify({"error": f"No user with email {data.get("email")} found"})
 
     if not data.get("password"):
-        return jsonify({"error": "Password is required"})
+        return jsonify({"error": "Password is required"}), 400
 
     if not user.check_password(data.get("password")):
-        return jsonify({"error": "The password provided does not match the original one."})
+        return jsonify({"error": "The password provided does not match the original one."}), 400
 
     access_token = create_access_token(
         identity=str(user.id), additional_claims={"email": data.get("email")}
     )
 
-    return jsonify({"user": user.serialize(), "token": access_token})
+    return jsonify({"user": user.serialize(), "token": access_token}), 200
